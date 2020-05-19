@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trick.name }}{% endblock %}
+
+{% block body %}
+    <article>
+        <h2>{{ trick.name }}</h2>
+
+        {% if trick.modifiedAt != null %}
+            {% set libelleDate = 'Ajouté le ' ~ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i') %}
+        {% else %}
+            {% set libelleDate = 'Modifié le ' ~ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:i') %}
+        {% endif %}
+
+        <div class="metadata">{{ libelleDate }}</div>
+        <div>
+            
+        </div>
+    </article>
+{% endblock %}
