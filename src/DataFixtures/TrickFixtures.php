@@ -2,19 +2,25 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-use App\Entity\Category;
 use App\Entity\Trick;
+use App\Entity\Category;
 use App\Entity\TrickPicture;
 use App\Entity\VideoPicture;
+use App\Service\FilenameCreator;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class TrickFixtures extends Fixture
+class TrickFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-
+        $encoder = new UserPasswordEncoderInterface();
         $faker = Faker\Factory::create(); 
+        $filesystem = new Filesystem();
+        $newFilename = new FilenameCreator();
 
         $categories = [
             [
@@ -85,6 +91,29 @@ class TrickFixtures extends Fixture
 
         ];
 
+        $dateCreation = $faker->dateTimeBetween('-3 months', '-2 months');
+
+        //Create the admin user
+        $user = new User();
+        $username = 'admin';        
+        $hash = $encoder->encodePassword($user, $username);
+        $userPicture = 'avatar_1.png';
+
+        $pictureFileName = $newFilename->createUniqueFilename($userPicture);
+
+        $pathData = $this->container->getParameter('images_directory') . '/avatar/' . $userPicture;
+        $newPath = $this->container->getParameter('upload_images_directory') . '/avatar/' . $pictureFileName;
+        $filesystem->copy($pathData, $newPath, true); //copy the pictureData to upload image directory
+
+        $user->setUsername($username)
+             ->setPassword($hash)
+             ->setEmail('admin@snowtricks.fr')
+             ->setConfirmed(1)
+             ->setCreatedAt($dateCreation)
+             ->setPictureFilename($pictureFileName);
+
+        $manager->persist($user);
+             
         //Create all categories
         $nbrCategories = count($categories);
         for($i = 0; $i < $nbrCategories; $i++)
@@ -105,7 +134,7 @@ class TrickFixtures extends Fixture
                     $trick = new Trick();
                     $trick->setName($trickData[0])
                           ->setDescription($trickData[2])
-                          ->setCreatedAt($faker->dateTimeBetween('-3 months', '-2 months'))
+                          ->setCreatedAt($dateCreation)
                           ->setCategory($category);
                     $manager->persist($trick);
 
@@ -133,5 +162,13 @@ class TrickFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    /*
+        Define the order in which fixures will be loaded
+    */
+    public function getOrder()
+    {
+        return 1;
     }
 }
