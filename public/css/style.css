@@ -3,23 +3,44 @@ section
     margin-top: 20px;
 }
 
+/* Header */
+#headerHome
+{
+	/* position: fixed; */
+	height: 100vh;
+	width: 100%;
+	background-image: url('../../images/headerPicture.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	/* -webkit-background-size: contain;  */
+}
+
 #listTricks
 {
     width: 100%;
 }
 
-.trick-item {
+.trick-presentation
+{
+	/* border: 1px solid darkgray; */
+	padding: 0%;
+	margin-right: 5px;
+}
+
+.trick-picture 
+{
 	position: relative;
 	height: 15em;
 	margin-bottom: 10px;
-	
+	background-color: darkgray;
 }
 
-.trick-item a {
+.trick-picture a {
 	color:#000;
 }
 
-.trick-item img {
+.trick-picture img {
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
