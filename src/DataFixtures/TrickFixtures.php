@@ -2,23 +2,34 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Category;
 use App\Entity\TrickPicture;
-use App\Entity\VideoPicture;
+use App\Entity\TrickVideo;
 use App\Service\FilenameCreator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TrickFixtures extends Fixture implements OrderedFixtureInterface
 {
+    private $encoder;
+    private $container;
+
+    public function __construct(UserPasswordEncoderInterface $encoder, ContainerInterface $container)
+	{
+        $this->encoder = $encoder;
+        $this->container = $container;
+	}
+
     public function load(ObjectManager $manager)
     {
-        $encoder = new UserPasswordEncoderInterface();
-        $faker = Faker\Factory::create(); 
+        // $encoder = new UserPasswordEncoderInterface();
+        $faker = \Faker\Factory::create('fr_FR'); 
         $filesystem = new Filesystem();
         $newFilename = new FilenameCreator();
 
@@ -96,19 +107,19 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface
         //Create the admin user
         $user = new User();
         $username = 'admin';        
-        $hash = $encoder->encodePassword($user, $username);
+        $hash = $this->encoder->encodePassword($user, $username);
         $userPicture = 'avatar_1.png';
 
         $pictureFileName = $newFilename->createUniqueFilename($userPicture);
 
-        $pathData = $this->container->getParameter('images_directory') . '/avatar/' . $userPicture;
+        $pathData = $this->container->getParameter('images_directory') . '/avatarsPicturesData/' . $userPicture;
         $newPath = $this->container->getParameter('upload_images_directory') . '/avatar/' . $pictureFileName;
-        $filesystem->copy($pathData, $newPath, true); //copy the pictureData to upload image directory
+        $filesystem->copy($pathData, $newPath, true); //copy the avatarPictureData to upload image directory
 
         $user->setUsername($username)
              ->setPassword($hash)
              ->setEmail('admin@snowtricks.fr')
-             ->setConfirmed(1)
+             ->setIsConfirmed(1)
              ->setCreatedAt($dateCreation)
              ->setPictureFilename($pictureFileName);
 
@@ -129,22 +140,25 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface
             for($j = 0; $j < $nbrTricks; $j++)
             {
                 $trickData = $tricks[$j];
-                if($trickData[1] == $category->getName())
+                if($trickData[1] == $i)
                 {
                     $trick = new Trick();
                     $trick->setName($trickData[0])
                           ->setDescription($trickData[2])
                           ->setCreatedAt($dateCreation)
+                          ->setUser($user)
                           ->setCategory($category);
                     $manager->persist($trick);
 
-                    //Create all pictures
-                    // $nbrPictures = count($trickData[3]);
-                    // for($k = 0; $k < $nbrPictures; $k++)
+                    //Create all pictures                    
                     foreach($trickData[3] as $pictureData)
                     {
-                        $picture = new TrickPicture();
-                        $picture->setFileName($pictureData)
+                        $picture = new TrickPicture();                        
+                        $trickPictureFileName = $newFilename->createUniqueFilename($pictureData);
+                        $pathData = $this->container->getParameter('images_directory') . '/tricksPicturesData/' . $pictureData;
+                        $newPath = $this->container->getParameter('upload_images_directory') . '/trick/' . $trickPictureFileName;
+                        $filesystem->copy($pathData, $newPath, true); //copy the trickPictureData to upload image directory
+                        $picture->setFileName($trickPictureFileName)
                                 ->setTrick($trick);
                         $manager->persist($picture);
                     }
@@ -152,7 +166,7 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface
                     //Create all videos
                     foreach($trickData[4] as $videoData)
                     {
-                        $video = new VideoPicture();
+                        $video = new TrickVideo();
                         $video->setLink($videoData)
                                 ->setTrick($trick);
                         $manager->persist($video);
