@@ -5,30 +5,38 @@
 {% block body %}
 
     <section class="trick">
-        <div id="listTricks">
-            <div class="row mx-auto">
+    <div class="container-fluid">
+        <div id="listTricks" class="mx-auto">
+            <div class="row">
             {% for trick in tricks %}                                                
                 <div class="col-lg-2 col-md-5 col-xs-12">
                     <div class="row">
-                        <div class="col-lg-12 essai">
-                            <a href="{{ path('trick_show') }}">
-                                <img src= "" id="photoPost">
+                        <div class="col-lg-12 essai trick-item">
+                            <a href="{{ path('trick_show', {'id': trick.id}) }}">
+                                <img class="img-fluid" src= "{{ asset('uploads/images/trick/' ~ trick.trickPictures.first.filename) }}" id="photoPost">
                             </a>
                         </div>
                         <h3>
-                            {{ tricks.name }}
+                            {{ trick.name }}
                         </h3>
                         {% if trick.modifiedAt != null %}
-                            <p>{{ trick.modifieddAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}}</p>
+                            <p>{{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}}</p>
                         {% else %}
-                            <p>{{ trick.createddAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:y')}}</p>
+                            <p>{{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:y')}}</p>
                         {% endif %}
-                        <a href="{{ path('trick_show') }}">Voir plus</a>                             
+                        <a href="{{ path('trick_show', {'id': trick.id}) }}">Voir plus</a>                             
                     </div>
                 </div>
             {% endfor %}            
             </div>
         </div>    
+        <button id="loadMoreTricks" class="btn btn-success">Plus de tricks!</button>
+        </div>
     </section>
 
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
 {% endblock %}

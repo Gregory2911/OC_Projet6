@@ -9,18 +9,31 @@ use App\Entity\Trick;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/{limit}/{offset}", name="home")
      */
-    public function index()
+    public function index($limit = 5, $offset = 0)
     {
+
         $repo = $this->getDoctrine()->getRepository(Trick::class);
 
-        $tricks = $repo->findAll();
+        $tricks = $repo->findBy(
+            [],
+            array('createdAt' => 'desc'),
+            $limit,
+            $offset
+        );
 
-        return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
-            'tricks' => $tricks
-        ]);
+        if ($limit == 5) {
+            return $this->render('trick/index.html.twig', [
+                'controller_name' => 'TrickController',
+                'tricks' => $tricks
+            ]);
+        } else {
+            return $this->render('trick/load_more.html.twig', [
+                'controller_name' => 'TrickController',
+                'tricks' => $tricks
+            ]);
+        }
     }
 
     /**
@@ -33,7 +46,7 @@ class TrickController extends AbstractController
         $trick = $repo->find($id);
 
         return $this->render('trick/show.html.twig', [
-            'trick' -> $trick
+            'trick' => $trick
         ]);
     }
 }
