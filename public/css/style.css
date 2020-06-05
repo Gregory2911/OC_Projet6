@@ -3,6 +3,23 @@ section
     margin-top: 20px;
 }
 
+@font-face
+{
+	font-family:'Superion';
+	src:url('../Superion.otf') format('truetype');
+}
+
+/* navbar */
+#logo
+{
+	font-family: 'Superion';
+}
+
+#logoPicture
+{
+	margin-right: 10px;
+}
+
 /* Header */
 #headerHome
 {
@@ -16,32 +33,81 @@ section
 	/* -webkit-background-size: contain;  */
 }
 
-#listTricks
+#headerSlogan
 {
-    width: 100%;
+	font-family: 'Superion';
+	font-size: 80px !important;
+	color: white;
+	position: absolute;
+	right: 10vw;
+	top: 50vh;
+	
 }
 
-.trick-presentation
+#arrow {
+	position: absolute;
+	left: 50vw;
+	top: 90vh;
+	background-color:white;
+	border-radius: 100%;
+}
+
+/* Index */
+#listTricks
+{
+	width: 100%;
+	margin-bottom: 30px;
+}
+
+.trickPresentation
 {
 	/* border: 1px solid darkgray; */
 	padding: 0%;
-	margin-right: 5px;
+	margin-right: 10px;
+	margin-bottom: 30px;
 }
 
-.trick-picture 
+.trickInfos
+{
+	background-color:rgb(30, 163, 198);	
+}
+
+.trickPicture 
 {
 	position: relative;
 	height: 15em;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 	background-color: darkgray;
 }
 
-.trick-picture a {
-	color:#000;
-}
-
-.trick-picture img {
+.trickPicture img {
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
+}
+
+.trickName
+{
+	font-family: 'Superion';
+	color: rgb(249, 185, 24);
+	padding-top: 5px;
+}
+
+.trickDate
+{
+	font-size: small;
+	padding-left: 5px;
+}
+
+.trickLink
+{
+	color: white;
+}
+
+#loadMoreTricks
+{
+	color: rgb(30, 163, 198);
+	background-color: rgb(249, 185, 24);	
+	/* font-weight: bold; */
+	font-family: 'Superion';
 }

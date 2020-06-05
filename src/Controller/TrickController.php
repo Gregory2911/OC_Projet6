@@ -9,9 +9,9 @@ use App\Entity\Trick;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/{limit}/{offset}", name="home")
+     * @Route("/tricks/{limit}/{offset}", name="index")
      */
-    public function index($limit = 5, $offset = 0)
+    public function index($limit = 0, $offset = 0)
     {
 
         $repo = $this->getDoctrine()->getRepository(Trick::class);
@@ -21,7 +21,7 @@ class TrickController extends AbstractController
             array('createdAt' => 'desc'),
             $limit,
             $offset
-        );
+        );  
 
         if ($limit == 5) {
             return $this->render('trick/index.html.twig', [
@@ -34,6 +34,14 @@ class TrickController extends AbstractController
                 'tricks' => $tricks
             ]);
         }
+    }
+
+    /**
+     * @Route("/", name="home")
+     */
+    public function home()
+    {
+        return $this->render('base.html.twig');
     }
 
     /**

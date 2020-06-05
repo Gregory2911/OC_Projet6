@@ -11,7 +11,7 @@
 
         {# navigation #}
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">SnowTricks</a>
+            <a id="logo" class="navbar-brand" href="#"><i id="logoPicture" class="fas fa-mountain"></i>SnowTricks</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,18 +34,19 @@
         </nav>
 
         {# header #}
-        <div id="headerHome">
-            <div id="headerSlogan">
-                <h1>Vive le snowboard !</h1>
-            </div>
+        <div id="headerHome">            
+            <h1 id="headerSlogan">Passion snowboard !</h1>            
         </div>
+        <div id="arrow" class="mx-auto"><a id="loadFirstTricks" href="#loadMoreTricks" class="btn" ><i class="fas fa-arrow-down fa-3x" title="Voir les tricks"></i></a></div>
 
-        <section class="container-fluid">
+        <section id="main" class="container-fluid">
             {% block body %}{% endblock %}  
         </section> 
         
         {% block javascripts %}
              <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+             <script src="https://kit.fontawesome.com/6476d46678.js" crossorigin="anonymous"></script>
+             <script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
         {% endblock %}
     </body>
 </html>

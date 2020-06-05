@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %} #}
 
-{% block title %}Hello TrickController!{% endblock %}
+{# {% block title %}Hello TrickController!{% endblock %} #}
 
 {% block body %}
 
@@ -9,22 +9,27 @@
             <div id="listTricks">
                 <div class="row justify-content-center">
                 {% for trick in tricks %}                                                
-                    <div class="col-lg-2 col-md-5 col-xs-12 trick-presentation">
+                    <div class="col-lg-2 col-md-5 col-xs-12 trickPresentation">
                         {# <div class="row"> #}
-                            <div class="trick-picture">
+                            <div class="trickPicture">
                                 <a href="{{ path('trick_show', {'id': trick.id}) }}">
                                     <img class="img-fluid" src= "{{ asset('uploads/images/trick/' ~ trick.trickPictures.first.filename) }}" id="photoPost">
                                 </a>
                             </div>
-                            <h3 class="text-center">
-                                {{ trick.name }}
-                            </h3>
-                            {% if trick.modifiedAt != null %}
-                                <p>{{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}}</p>
-                            {% else %}
-                                <p>{{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:y')}}</p>
-                            {% endif %}
-                            <a href="{{ path('trick_show', {'id': trick.id}) }}">Voir plus</a>                             
+                            <div class="trickInfos">
+                                <h3 class="text-center text-break trickName">
+                                    {{ trick.name }}
+                                </h3>
+                                {% if trick.modifiedAt != null %}
+                                    <p class="trickDate">Modifié le {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}} par {{Trick.user.username}}</p>
+                                {% else %}
+                                    <p class="trickDate">Ajouté le {{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:y')}} par {{trick.user.username}}</p>
+                                {% endif %}
+                                <div class="text-center">
+                                    <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
+                                </div>                                
+                            </div>
+                            
                         {# </div> #}
                     </div>
                 {% endfor %}            
@@ -32,15 +37,21 @@
             </div> 
             <div class="row">
                 <div class="col text-center">
-                    <button id="loadMoreTricks" class="btn btn-success">Afficher plus de tricks !</button>
+                    <button id="loadMoreTricks" class="btn btn-success">Plus de tricks !</button>
                 </div>
             </div>            
         </div>
+
+        
+            
+        
+        
     </section>
 
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
+	{# {{ parent() }} #}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
 {% endblock %}
