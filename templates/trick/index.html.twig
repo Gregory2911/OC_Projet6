@@ -2,7 +2,7 @@
 
 {# {% block title %}Hello TrickController!{% endblock %} #}
 
-{% block body %}
+{# {% block body %} #}
 
     <section class="trick">
         <div class="container-fluid">
@@ -35,23 +35,17 @@
                 {% endfor %}            
                 </div>
             </div> 
-            <div class="row">
+            {# <div class="row">
                 <div class="col text-center">
                     <button id="loadMoreTricks" class="btn btn-success">Plus de tricks !</button>
                 </div>
-            </div>            
+            </div>             #}
         </div>
-
-        
-            
-        
-        
     </section>
 
-{% endblock %}
+{# {% endblock %} #}
 
-{% block javascripts %}
-	{# {{ parent() }} #}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{# {% block javascripts %}
+	{{ parent() }}
 	<script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
-{% endblock %}
+{% endblock %} #}
