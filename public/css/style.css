@@ -20,7 +20,7 @@ section
 	margin-right: 10px;
 }
 
-/* Header */
+/* Header Home*/
 #headerHome
 {
 	/* position: fixed; */
@@ -50,6 +50,24 @@ section
 	top: 90vh;
 	background-color:white;
 	border-radius: 100%;
+}
+
+/*Header Show*/
+#headerShow
+{
+	height: 50vh;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+#headerShowSlogan
+{
+	font-family: 'Superion';
+	font-size: 80px !important;
+	color: rgb(249, 185, 24);
+	position: absolute;
 }
 
 /* Index */
@@ -111,4 +129,45 @@ section
 	/* font-weight: bold; */
 	font-family: 'Superion';
 	display: none;
+}
+
+/*show*/
+.trickMedia {
+	position: relative;
+    height: 100px;    
+    overflow: hidden;	
+}
+
+.trickMedia img
+{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+.trickMedia iframe
+{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+    left: 0;
+	background-color: #000;
+}
+
+#titleDescription
+{
+	font-family: 'Superion';
+}
+
+.commentMedia
+{
+	height: 100px;
+}
+
+.commentMedia img
+{
+	object-fit: cover;
+	height: 100%;
 }

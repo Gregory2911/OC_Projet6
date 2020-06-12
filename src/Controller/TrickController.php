@@ -41,7 +41,7 @@ class TrickController extends AbstractController
      */
     public function home()
     {
-        return $this->render('base.html.twig');
+        return $this->render('trick/home.html.twig');
     }
 
     /**

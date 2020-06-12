@@ -3,18 +3,65 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
-    <article>
-        <h2>{{ trick.name }}</h2>
-
-        {% if trick.modifiedAt != null %}
-            {% set libelleDate = 'Ajouté le ' ~ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i') %}
-        {% else %}
-            {% set libelleDate = 'Modifié le ' ~ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:i') %}
-        {% endif %}
-
-        <div class="metadata">{{ libelleDate }}</div>
-        <div>
-            
+    <section class="container">
+        <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ trick.trickPictures.first.filename }}');">
+            <h1 id="headerShowSlogan">{{ trick.name }}</h1>            
         </div>
-    </article>
+
+        <div class="row">
+            {% for picture in trick.trickPictures %}
+                <div class="col-lg-2">
+                    <div class="trickMedia">
+                        <img src="{{ asset('uploads/images/trick/' ~ picture.filename) }}" onclick="displayPictureViewModal( '{{ asset('uploads/img/' ~ picture.filename) }}', this )" alt="figure {{ trick.name }} - image {{ loop.index }}">
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for video in trick.trickVideos %}
+                <div class="col-lg-2">
+                    <div class="trickMedia">
+                        <iframe src="{{'https://www.youtube.com/embed/' ~ video.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-lg-6">
+                <article>        
+                     <div>
+                        <h2 id="titleDescription">Description du trick</h2> 
+                        {{ trick.description }} 
+                    </div>
+
+                    <div class="badge badge-info">categorie : {{ trick.category.name }}</div>
+                    <div class="badge badge-success">créé le : {{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:i')}}</div>
+                    {% if trick.modifiedAt != null %}
+                        <div class="badge badge-warning">modifié le : {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i')}}</div>              
+                    {% endif %}
+
+                    {# <div class="metadata">{{ libelleDate }}</div>                     #}
+                </article>
+
+                <ul class="list-unstyled">
+                    {% for comment in trick.comments %}
+                        <li class="media commentMedia">                    
+                            <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                    
+                            <div class="media-body">
+                                <h4 class="mt-0 mb-1">{{ comment.user.username }}</h4>
+                                {{ comment.content }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+    </section>
 {% endblock %}
+
+
+{# {% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
+{% endblock %} #}
