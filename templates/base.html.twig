@@ -37,16 +37,23 @@
         <div id="headerHome">            
             <h1 id="headerSlogan">Passion snowboard !</h1>            
         </div>
-        <div id="arrow" class="mx-auto"><a id="loadFirstTricks" href="#loadMoreTricks" class="btn" ><i class="fas fa-arrow-down fa-3x" title="Voir les tricks"></i></a></div>
+        <div id="arrow" class="mx-auto"><a id="loadFirstTricks" class="btn" ><i class="fas fa-arrow-down fa-3x" title="Voir les tricks"></i></a></div>
 
         <section id="main" class="container-fluid">
-            {% block body %}{% endblock %}  
-            <div class="row">
-                <div class="col text-center">
-                    <button id="loadMoreTricks" class="btn btn-success">Plus de tricks !</button>
-                </div>
-            </div>            
+            {% block body %}{% endblock %}              
         </section> 
+        
+        <div class="row">
+            <div class="col text-center">
+                <button id="loadMoreTricks" class="btn btn-success">Plus de tricks !</button>
+            </div>
+        </div>   
+
+        <div class="card text-center footer">
+            <div class="card-footer text-muted">
+                <footer>Snowtricks</footer>
+            </div>
+        </div>                 
         
         {% block javascripts %}
              <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

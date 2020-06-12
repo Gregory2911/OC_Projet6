@@ -23,7 +23,7 @@ class TrickController extends AbstractController
             $offset
         );  
 
-        if ($limit == 5) {
+        if ($limit == 10) {
             return $this->render('trick/index.html.twig', [
                 'controller_name' => 'TrickController',
                 'tricks' => $tricks
