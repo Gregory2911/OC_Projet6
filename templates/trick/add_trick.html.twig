@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+
+    <h1>Création d'un trick</h1>
+
+    <div class="container">
+
+        {{ form_start(formTrick) }}
+
+        {{ form_row(formTrick.name, {'attr': {'label':"Nom du trick"}}) }}
+        
+        {{ form_widget(formTrick.description) }}
+
+        
+
+        <button type="submit" class="btn btn-success">
+            {% if editMode %}
+                Modifier le trick
+            {% else %}
+                Ajouter le trick
+            {% endif %}
+        </button>
+
+        {{ form_end(formTrick) }}
+    
+    </div>
+
+{% endblock %}
