@@ -9,11 +9,37 @@
 
         {{ form_start(formTrick) }}
 
-        {{ form_row(formTrick.name, {'attr': {'label':"Nom du trick"}}) }}
+        {{ form_row(formTrick.name, {
+            'attr': {'placeholder':"Nom du trick"},
+            'label': 'Nom du trick'
+        }) }}
         
-        {{ form_widget(formTrick.description) }}
+        {{ form_row(formTrick.description, {
+            'attr': {'placeholder':"Description du trick"},
+            'label': 'Description du trick'
+        }) }}
 
+        {{ form_row(formTrick.category, {
+            'label': 'Catégorie'
+        }) }}
+
+        {# <div id="trickPicture">
+            {{ form_row(formTrick.trickPictures) }}
+        </div> #}
+        <ul id="email-fields-list" class="pictureForm"
+            data-prototype="{{ form_widget(formTrick.trickPictures.vars.prototype)|e }}"
+            data-widget-tags="{{ '<li></li>'|e }}"
+            data-widget-counter="{{ formTrick.trickPictures|length }}">
+        {% for pictureField in formTrick.trickPictures %}
+            <li>
+                {{ form_errors(pictureField) }}
+                {{ form_widget(pictureField) }}    
+            </li>
+        {% endfor %}
+            
+        </ul>
         
+        {# <button type="button" class="addPictureFormLink" data-list-selector="#email-fields-list">Ajouter une image</button> #}
 
         <button type="submit" class="btn btn-success">
             {% if editMode %}
@@ -27,4 +53,9 @@
     
     </div>
 
+{% endblock %}
+
+ {% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/add_trick.js') }}"></script>             
 {% endblock %}

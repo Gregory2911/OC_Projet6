@@ -66,16 +66,10 @@ class TrickController extends AbstractController
      * @Route("/edit_trick/{id}", name="edit_trick")
      */
     public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager){
-        // $trick = new Trick();
         if(!$trick){
             $trick = new Trick();
         }
 
-        // $form = $this->createFormBuilder($trick)
-        //              ->add('name')
-        //              ->add('description')
-        //              ->add('category')
-        //              ->getForm();
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
@@ -83,10 +77,10 @@ class TrickController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             //Si modification
             if($trick->getId()){
-                $trick->setCreatedAt(new \DateTime());
+                $trick->setModifiedAt(new \DateTime());
             }
             else{
-                $trick->modifiedAt(new \DateTime());
+                $trick->setCreatedAt(new \DateTime());
             }
         
             $manager->persist($trick);

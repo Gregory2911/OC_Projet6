@@ -171,3 +171,8 @@ section
 	object-fit: cover;
 	height: 100%;
 }
+
+/*Add trick*/
+.custom-file-input ~ .custom-file-label::after {
+    content: "Parcourir";
+}

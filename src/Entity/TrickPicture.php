@@ -27,6 +27,11 @@ class TrickPicture
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $mainPicture;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class TrickPicture
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getMainPicture(): ?bool
+    {
+        return $this->mainPicture;
+    }
+
+    public function setMainPicture(?bool $mainPicture): self
+    {
+        $this->mainPicture = $mainPicture;
 
         return $this;
     }

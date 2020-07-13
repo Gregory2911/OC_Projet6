@@ -25,12 +25,9 @@ class PictureType extends AbstractType
                             'image/jpeg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide'
+                        'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
                     ])
-                    ] 
-            ->add('name', TextType::class, [
-                'mapped' => false
-            ])  
+                ]             
             ])
         ;
     }
