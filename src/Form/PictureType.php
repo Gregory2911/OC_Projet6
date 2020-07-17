@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class PictureType extends AbstractType
 {
@@ -27,9 +27,12 @@ class PictureType extends AbstractType
                         ],
                         'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
                     ])
-                ]             
+                ]
             ])
-        ;
+            ->add('mainPicture', CheckboxType::class, [
+                'label' => 'Image d\'entête',
+                'attr' => ['class' => 'essai']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

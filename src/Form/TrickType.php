@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Trick;
+use App\Form\VideoType;
 use App\Form\PictureType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,33 +18,24 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')            
-            ->add('category') 
-            // ->add('picture', FileType::class, [
-            //     'mapped' => false, // to not try to store the file in the database
-            //     'required' => false, // to not re-upload the file at every edit for update
-            //     'label' => 'Image d\'illustration',
-            //     'constraints' => [
-            //         new Image([
-            //             'maxSize' => '1024k',
-            //             'maxSizeMessage' => 'Le fichier image est trop lourd (1024Ko maximum)',
-            //             'mimeTypes' => [
-            //                 'image/jpg',
-            //                 'image/jpeg',
-            //                 'image/png',
-            //             ],
-            //             'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
-            //         ])
-            //     ],
-            // ])
-            ->add('trickPictures', CollectionType::class,[
+            ->add('description')
+            ->add('category')
+            ->add('trickPictures', CollectionType::class, [
                 'entry_type' => PictureType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
+                'by_reference' => false,
                 'prototype' => true
             ])
-            // ->add('mainPicture')     
-        ;
+            ->add('trickVideos', CollectionType::class, [
+                'entry_type' => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'prototype' => true
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

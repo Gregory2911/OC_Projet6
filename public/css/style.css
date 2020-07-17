@@ -173,6 +173,27 @@ section
 }
 
 /*Add trick*/
+#headerAddTrick
+{
+	height: 50vh;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
 .custom-file-input ~ .custom-file-label::after {
     content: "Parcourir";
+}
+
+.deleteTrickPicture, .deleteTrickVideo
+{
+	border: none;
+	background-color: #FFFFFF;
+}
+
+li
+{
+	list-style: none;
+	margin-bottom: 10px;
 }
