@@ -27,7 +27,8 @@ class PictureType extends AbstractType
                         ],
                         'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
                     ])
-                ]
+                ],
+                'attr' => ['onchange' => 'loadFile(event)']
             ])
             ->add('mainPicture', CheckboxType::class, [
                 'label' => 'Image d\'entête',

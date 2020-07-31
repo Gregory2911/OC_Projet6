@@ -7,9 +7,9 @@
             <div class="custom-file">
                 {{ form_widget(picture.filename) }}                
             </div>
-            <div>
+            {# <div> #}
                 {{ form_widget(picture.mainPicture) }}                
-            </div>
+            {# </div> #}
             <div class="input-group-append">
                 <button type="button" class="deleteTrickPicture"><i class="fas fa-backspace fa-2x"></i></button>
             </div>
@@ -36,13 +36,13 @@
 
     <div class="container">
 
-        <div id="headerAddTrick" 
+        <img id="headerAddTrick" 
             {% if editMode %}
-                style="background-image: url('../../uploads/images/trick/{{ trick.trickPictures.first.filename }}');">            
+                src="../../uploads/images/trick/{{ trick.trickPictures.first.filename }}">            
             {% else %}
-                style="background-image: url('https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20')">            
+                src="https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20">            
             {% endif %}            
-        </div>
+        </img>
 
         {{ form_start(formTrick) }}
 

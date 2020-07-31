@@ -11,6 +11,8 @@ var $newPictureLinkLi = $('<li></li>').append($addPictureFormButton);
 var $addVideoFormButton = $('<button type="button" class="btn btn-info addVideoFormLink">Ajouter une vidéo</button>');
 var $newVideoLinkLi = $('<li></li>').append($addVideoFormButton);
 
+var $essai;
+
 jQuery(document).ready(function () {
     // Get the ul that holds the collection of pictureForm
     $collectionHolderPicture = $('ul.pictureForm');
@@ -35,20 +37,21 @@ jQuery(document).ready(function () {
         addPictureForm($collectionHolderVideo, $newVideoLinkLi);
     });
 
-    var $checkboxChecked;
-    $('.essai').each(function () {
-        alert('coucou');
-        if ($(this).is(':checked')) {
-            alert('coucou');
-            $checkboxChecked = $(this);
-        }
-        $('.essai').each(function () {
-            if ($(this) != $checkboxChecked) {
-                alert('coucou');
-                $(this).prop('checked', false);
-            }
-        })
-    });
+    // var $checkbox = document.getElementsByClassName('.essai');
+    // $checkbox.
+    // $('.essai').each(function () {
+    //     alert('coucou');
+    //     if ($(this).is(':checked')) {
+    //         alert('coucou');
+    //         $checkboxChecked = $(this);
+    //     }
+    //     $('.essai').each(function () {
+    //         if ($(this) != $checkboxChecked) {
+    //             alert('coucou');
+    //             $(this).prop('checked', false);
+    //         }
+    //     })
+    // });
 });
 
 function addPictureForm($collectionHolder, $newLinkLi) {
@@ -89,7 +92,44 @@ function addTodoFormDeleteLink($formPicture) {
     var $removeFormButton = $formPicture.find("button");
 
     $removeFormButton.on('click', function (e) {
-        // remove the li for the todo form
+        //delete main picture if the checkbox of the picture form was checked
+        var checkbox = $($formPicture).children().find('.form-check').find('.form-check-input');
+        if ($(checkbox).is(':checked')) {
+            var output = document.getElementById('headerAddTrick');
+            output.src = 'https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20';
+        }
+        // remove the li for the picture form
         $formPicture.remove();
     });
 }
+
+//control of the checkbox of main picture
+jQuery(document).on('change', '.essai', function () {
+    if ($(this).is(':checked')) {
+        $('.essai').each(function (index, elem) {
+            $(elem).prop('checked', false);
+        });
+        $(this).prop('checked', true);
+
+        //display the main picture
+        var $inputFile = $(this).parent().parent().find('.custom-file').children().find('.custom-file-input');
+        $($inputFile).change();
+    }
+    else {
+        var output = document.getElementById('headerAddTrick');
+        output.src = 'https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20';
+    }
+});
+
+var loadFile = function (event) {
+    var target = event.target;
+    var checkboxMainPicture = $(target).parent().parent().parent().find('.form-check').children();
+    if ($(checkboxMainPicture).is(':checked')) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('headerAddTrick');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+};
