@@ -32,7 +32,8 @@ class PictureType extends AbstractType
             ])
             ->add('mainPicture', CheckboxType::class, [
                 'label' => 'Image d\'entête',
-                'attr' => ['class' => 'essai']
+                'attr' => ['class' => 'essai'],
+                'required' => false,
             ]);
     }
 

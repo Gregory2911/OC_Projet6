@@ -22,7 +22,7 @@ class TrickPicture
     private $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="trickPictures")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="trickPictures", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
