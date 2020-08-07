@@ -54,6 +54,15 @@
                         </li>
                     {% endfor %}
                 </ul>
+                
+                {% if app.user %}
+                    {{ form_start(commentForm) }}
+                    {{ form_row(commentForm.content,{
+                        'label': 'Commentaire'
+                    }) }}
+                    <button type="submit" class="btn btn-success">Commenter</button>
+                    {{ form_end(commentForm) }}
+                {% endif %}
             </div>
         </div>
         

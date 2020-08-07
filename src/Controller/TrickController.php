@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Trick;
+use App\Entity\Comment;
 use App\Form\TrickType;
+use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,14 +53,28 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{id}", name="trick_show")
      */
-    public function show($id)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
     {
-        $repo = $this->getDoctrine()->getRepository(Trick::class);
+        $comment = new Comment();
 
-        $trick = $repo->find($id);
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isvalid()){
+            $user = $this->getUser();
+            $comment->setCreatedAt(new \DateTime());
+            $comment->setTrick($trick);
+            $comment->setUser($user);
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToroute('trick_show', ['id' => $trick->getId()]);
+        }
 
         return $this->render('trick/show.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'commentForm' => $form->createView()
         ]);
     }
 
