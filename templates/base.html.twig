@@ -22,16 +22,20 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Tricks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Se connecter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Se deconnecter</a>
-                    </li>
+                    </li>                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('add_trick') }}">Ajouter un trick</a>
                     </li>
+
+                    {% if not app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('security_login') }}">Se connecter</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('security_logout') }}">Se deconnecter</a>
+                        </li>
+                    {% endif %}
                 </ul>            
             </div>
         </nav>
