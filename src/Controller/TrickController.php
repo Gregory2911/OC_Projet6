@@ -7,10 +7,13 @@ use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Service\FilenameCreator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class TrickController extends AbstractController
 {
@@ -21,7 +24,7 @@ class TrickController extends AbstractController
     {
         return $this->render('trick/home.html.twig');
     }
-    
+
     /**
      * @Route("/tricks/{limit}/{offset}", name="index")
      */
@@ -35,7 +38,7 @@ class TrickController extends AbstractController
             array('createdAt' => 'desc'),
             $limit,
             $offset
-        );  
+        );
 
         if ($limit == 10) {
             return $this->render('trick/index.html.twig', [
@@ -48,7 +51,7 @@ class TrickController extends AbstractController
                 'tricks' => $tricks
             ]);
         }
-    }    
+    }
 
     /**
      * @Route("/trick/{id}", name="trick_show")
@@ -61,7 +64,7 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isvalid()){
+        if ($form->isSubmitted() && $form->isvalid()) {
             $user = $this->getUser();
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
@@ -82,53 +85,50 @@ class TrickController extends AbstractController
      * @Route("/add_trick", name="add_trick")
      * @Route("/edit_trick/{id}", name="edit_trick")
      */
-    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager){
-        if(!$trick){
+    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager)
+    {
+        if (!$trick) {
             $trick = new Trick();
         }
-        
 
-         //Create the admin user
-        //  $user = new User();
-        //  $username = 'essai';        
-        //  $userPicture = 'avatar_1.png';
-        //  $pictureFileName = "blabla";
-        //  $user->setUsername($username)
-        //       ->setPassword("blabla")
-        //       ->setEmail('admin@snowtricks.fr')
-        //       ->setIsConfirmed(1)
-        //       ->setCreatedAt(new \DateTime())
-        //       ->setPictureFilename($pictureFileName);
-        // $manager->persist($user);
-        
+        $user = $this->getUser();
+
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){                                                       
-            
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $trick->setUser($user);
+
             //Si modification
-            if($trick->getId()){
+            if ($trick->getId()) {
                 $trick->setModifiedAt(new \DateTime());
-            }
-            else{                
-                $trick->setCreatedAt(new \DateTime()); 
+            } else {
+                $trick->setCreatedAt(new \DateTime());
                 // $trick->setUser($user);
-            }                        
+            }
 
-            // submitted pictures handling
-            // $submittedPictures = $trick->getTrickPictures();
-            // foreach($submittedPictures as $submittedPicture){
-                /** @var UploadedFile $file */
-                // $file = $submittedPicture->getFile();
 
-                // if file uploaded, because field not required
-                
-                    // $newFilename = $this->saveUploadedFile($file);
-                    // $submittedPicture->setFilename("essai"); // store only the filename in database
-                    // $manager->persist($submittedPicture);
-                
-            // }            
+            // die();
+
+            //submitted pictures handling
+            $submittedPictures = $trick->getTrickPictures();
+            $newFilename = new FilenameCreator();
+            $filesystem = new Filesystem();
+
+            foreach ($submittedPictures as $submittedPicture) {
+
+                $file = $submittedPicture->getFileName();
+                $uploadFile = new UploadedFile($file, $file);
+
+                $trickPictureFileName = $newFilename->createUniqueFilename($file);
+                // $pathData = $this->container->getParameter('images_directory') . '/tricksPicturesData/' . $file;
+                $newPath = 'public/uploads/images' . $trickPictureFileName;
+                $filesystem->copy($uploadFile->getClientOriginalName(), $newPath, true); //copy the trickPictureData to upload image directory
+                $submittedPicture->setFilename($file); // store only the filename in database
+                $manager->persist($submittedPicture);
+            }
 
             $manager->persist($trick);
             $manager->flush();
