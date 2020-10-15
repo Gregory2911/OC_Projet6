@@ -118,15 +118,15 @@ class TrickController extends AbstractController
             $filesystem = new Filesystem();
 
             foreach ($submittedPictures as $submittedPicture) {
+                /** @var UploadedFile $essai */
+                $essai = $submittedPicture->getFileName();
+                $essai = pathinfo($essai->getClientOriginalName(),PATHINFO_FILENAME);                
+                $trickPictureFileName = $newFilename->createUniqueFilename($originalFilename);                
 
-                $file = $submittedPicture->getFileName();
-                $uploadFile = new UploadedFile($file, $file);
-
-                $trickPictureFileName = $newFilename->createUniqueFilename($file);
-                // $pathData = $this->container->getParameter('images_directory') . '/tricksPicturesData/' . $file;
-                $newPath = 'public/uploads/images' . $trickPictureFileName;
-                $filesystem->copy($uploadFile->getClientOriginalName(), $newPath, true); //copy the trickPictureData to upload image directory
-                $submittedPicture->setFilename($file); // store only the filename in database
+                $submittedPicture->move('public/uploads/images',$trickPictureFileName);
+                // $newPath = 'public/uploads/images' . $trickPictureFileName;
+                // $filesystem->copy($uploadFile->getClientOriginalName(), $newPath, true); //copy the trickPictureData to upload image directory
+                // $submittedPicture->setFilename($file); // store only the filename in database
                 $manager->persist($submittedPicture);
             }
 
