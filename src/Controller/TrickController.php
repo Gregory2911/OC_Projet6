@@ -107,27 +107,30 @@ class TrickController extends AbstractController
             } else {
                 $trick->setCreatedAt(new \DateTime());
                 // $trick->setUser($user);
-            }
-
-
-            // die();
+            }            
 
             //submitted pictures handling
             $submittedPictures = $trick->getTrickPictures();
-            $newFilename = new FilenameCreator();
+            $filename = new FilenameCreator();
             $filesystem = new Filesystem();
-
             foreach ($submittedPictures as $submittedPicture) {
-                /** @var UploadedFile $essai */
-                $essai = $submittedPicture->getFileName();
-                $essai = pathinfo($essai->getClientOriginalName(),PATHINFO_FILENAME);                
-                $trickPictureFileName = $newFilename->createUniqueFilename($originalFilename);                
-
-                $submittedPicture->move('public/uploads/images',$trickPictureFileName);
-                // $newPath = 'public/uploads/images' . $trickPictureFileName;
-                // $filesystem->copy($uploadFile->getClientOriginalName(), $newPath, true); //copy the trickPictureData to upload image directory
-                // $submittedPicture->setFilename($file); // store only the filename in database
+                /** @var UploadedFile $file */
+                $file = $submittedPicture->getFile();                         
+                $newFilename = $filename->createUniqueFilename($file->getClientOriginalName());
+                try {
+                    $file->move($this->getParameter('upload_images_directory') . '/trick',$newFilename);                
+                } catch(FileException $e){
+                    throw $e;
+                }
+                
+                $submittedPicture->setFilename($newFilename); // store only the filename in database
                 $manager->persist($submittedPicture);
+            }
+
+            //submitted videos handling
+            $submittedVideos = $trick->getTrickVideos();
+            foreach($submittedVideos as $submittedVideo){
+                $manager->persist($submittedVideo);
             }
 
             $manager->persist($trick);

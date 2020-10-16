@@ -32,6 +32,11 @@ class TrickPicture
      */
     private $mainPicture;
 
+    /**
+     * @var UploadedFile $file
+     */
+    protected $file;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class TrickPicture
     public function setMainPicture(?bool $mainPicture): self
     {
         $this->mainPicture = $mainPicture;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
 
         return $this;
     }
