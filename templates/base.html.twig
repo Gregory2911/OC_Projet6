@@ -39,7 +39,13 @@
                 </ul>            
             </div>
         </nav>
-                
+
+        {% for message in app.flashes('warning') %}
+            <div class="flash-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {% block body %}{% endblock %}              
         
         <div class="card text-center footer">
