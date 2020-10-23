@@ -107,7 +107,7 @@ class TrickController extends AbstractController
             } else {
                 $trick->setCreatedAt(new \DateTime());
                 // $trick->setUser($user);
-            }            
+            }
 
             //submitted pictures handling
             $submittedPictures = $trick->getTrickPictures();
@@ -115,21 +115,21 @@ class TrickController extends AbstractController
             $filesystem = new Filesystem();
             foreach ($submittedPictures as $submittedPicture) {
                 /** @var UploadedFile $file */
-                $file = $submittedPicture->getFile();                         
+                $file = $submittedPicture->getFile();
                 $newFilename = $filename->createUniqueFilename($file->getClientOriginalName());
                 try {
-                    $file->move($this->getParameter('upload_images_directory') . '/trick',$newFilename);                
-                } catch(FileException $e){
+                    $file->move($this->getParameter('upload_images_directory') . '/trick', $newFilename);
+                } catch (FileException $e) {
                     throw $e;
                 }
-                
+
                 $submittedPicture->setFilename($newFilename); // store only the filename in database
                 $manager->persist($submittedPicture);
             }
 
             //submitted videos handling
             $submittedVideos = $trick->getTrickVideos();
-            foreach($submittedVideos as $submittedVideo){
+            foreach ($submittedVideos as $submittedVideo) {
                 $manager->persist($submittedVideo);
             }
 

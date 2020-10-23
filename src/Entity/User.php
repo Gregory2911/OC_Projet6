@@ -72,6 +72,11 @@ class User implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activationToken;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -205,13 +210,17 @@ class User implements UserInterface
         return $this;
     }
 
-    public function eraseCredentials() {}
+    public function eraseCredentials()
+    {
+    }
 
-    public function getSalt() {}
+    public function getSalt()
+    {
+    }
 
     public function getRoles()
     {
-        return['ROLE_USER'];
+        return ['ROLE_USER'];
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -226,8 +235,20 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __toString(){
+    public function getActivationToken(): ?string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(?string $activationToken): self
+    {
+        $this->activationToken = $activationToken;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
         return $this->username;
     }
-    
 }

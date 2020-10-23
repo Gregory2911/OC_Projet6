@@ -46,6 +46,12 @@
             </div>
         {% endfor %}
 
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {% block body %}{% endblock %}              
         
         <div class="card text-center footer">
