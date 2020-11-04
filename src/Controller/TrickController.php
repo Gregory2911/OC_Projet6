@@ -76,19 +76,25 @@ class TrickController extends AbstractController
         }
 
         $pictures = $trick->getTrickPictures();
-
         $mainPicture = null;
-
         foreach($pictures as $value){            
             if($value->getMainPicture() == true ){
                 $mainPicture = $value;
             }
         }
 
+        $repo = $this->getDoctrine()->getRepository(Comment::class);
+
+        $comments =  $repo->findBy(
+            ['trick' => $trick],
+            array('createdAt' => 'desc')
+        );
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
-            'mainPicture' => $mainPicture
+            'mainPicture' => $mainPicture,
+            'comments' => $comments
         ]);
     }
 

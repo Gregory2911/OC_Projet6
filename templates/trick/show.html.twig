@@ -48,7 +48,7 @@
                 </article>
 
                 <ul class="list-unstyled">
-                    {% for comment in trick.comments %}
+                    {% for comment in comments %}
                         <li class="media commentMedia">                    
                             <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                    
                             <div class="media-body">
