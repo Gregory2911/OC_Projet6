@@ -43,11 +43,9 @@
                     {% if trick.modifiedAt != null %}
                         <div class="badge badge-warning">modifié le : {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i')}}</div>              
                     {% endif %}
-
-                    {# <div class="metadata">{{ libelleDate }}</div>                     #}
                 </article>
 
-                <ul class="list-unstyled">
+                <ul class="list-unstyled" id="test">
                     {% for comment in comments %}
                         <li class="media commentMedia">                    
                             <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                    
@@ -58,6 +56,9 @@
                         </li>
                     {% endfor %}
                 </ul>
+
+                <button id="loadMoreComments" class="btn btn-success">Plus de commentaires !</button>
+                <div id="trickID" style="display:none;">{{ trick.id }}</div>                
                 
                 {% if app.user %}
                     {{ form_start(commentForm) }}
@@ -72,8 +73,7 @@
     </section>
 {% endblock %}
 
-
-{# {% block javascripts %}
+{% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
-{% endblock %} #}
+{% endblock %}

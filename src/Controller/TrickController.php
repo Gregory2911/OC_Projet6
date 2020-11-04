@@ -75,27 +75,56 @@ class TrickController extends AbstractController
             return $this->redirectToroute('trick_show', ['id' => $trick->getId()]);
         }
 
+        //recovery of the main photo if it exists
         $pictures = $trick->getTrickPictures();
         $mainPicture = null;
-        foreach($pictures as $value){            
-            if($value->getMainPicture() == true ){
+        foreach ($pictures as $value) {
+            if ($value->getMainPicture() == true) {
                 $mainPicture = $value;
             }
         }
 
+        //recovery of the comments
         $repo = $this->getDoctrine()->getRepository(Comment::class);
-
         $comments =  $repo->findBy(
             ['trick' => $trick],
-            array('createdAt' => 'desc')
+            array('createdAt' => 'desc'),
+            5,
+            0
         );
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
             'mainPicture' => $mainPicture,
-            'comments' => $comments
+            'comments' => $comments,
         ]);
+    }
+
+    /**
+     * @Route("/load_more_comments/{trickId}/{offset}", name="load_more_comments")
+     */
+    public function loadMoreComments($trickId, $offset)
+    {
+
+        if (isset($trickId) && isset($offset)) {
+            $repo = $this->getDoctrine()->getRepository(Trick::class);
+
+            $trick = $repo->findOneBy(
+                ['id' => $trickId]
+            );
+
+            $repo = $this->getDoctrine()->getRepository(Comment::class);
+            $comments =  $repo->findBy(
+                ['trick' => $trick],
+                array('createdAt' => 'desc'),
+                5,
+                $offset
+            );
+            return $this->render('trick/load_more_comments.html.twig', [
+                'comments' => $comments
+            ]);
+        }
     }
 
     /**
