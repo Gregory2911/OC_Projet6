@@ -75,9 +75,20 @@ class TrickController extends AbstractController
             return $this->redirectToroute('trick_show', ['id' => $trick->getId()]);
         }
 
+        $pictures = $trick->getTrickPictures();
+
+        $mainPicture = null;
+
+        foreach($pictures as $value){            
+            if($value->getMainPicture() == true ){
+                $mainPicture = $value;
+            }
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'commentForm' => $form->createView()
+            'commentForm' => $form->createView(),
+            'mainPicture' => $mainPicture
         ]);
     }
 

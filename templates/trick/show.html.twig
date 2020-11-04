@@ -4,7 +4,11 @@
 
 {% block body %}
     <section class="container">
-        <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ trick.trickPictures.first.filename }}');">
+        {% if mainPicture is null %}
+            <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ trick.trickPictures.first.filename }}');">
+        {% else %}
+            <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ mainPicture.filename }}');">
+        {% endif %}
             <h1 id="headerShowSlogan">{{ trick.name }}</h1>            
         </div>
 
@@ -65,7 +69,6 @@
                 {% endif %}
             </div>
         </div>
-        
     </section>
 {% endblock %}
 
