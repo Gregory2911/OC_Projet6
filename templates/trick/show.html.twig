@@ -5,7 +5,7 @@
 {% block body %}
     <section class="container">
         {% if mainPicture is null %}
-            <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ trick.trickPictures.first.filename }}');">
+            <div id="headerShow" style="background-image: url('../../images/headerPicture.jpg');">
         {% else %}
             <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ mainPicture.filename }}');">
         {% endif %}
@@ -24,7 +24,7 @@
             {% for video in trick.trickVideos %}
                 <div class="col-lg-2">
                     <div class="trickMedia">
-                        <iframe src="{{'https://www.youtube.com/embed/' ~ video.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe src="{{video.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
             {% endfor %}

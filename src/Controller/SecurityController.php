@@ -9,10 +9,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
@@ -29,6 +30,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
 
@@ -47,19 +49,8 @@ class SecurityController extends AbstractController
                 ->from('agnan.gregory@orange.fr')
                 ->to($user->getEmail())
                 ->subject('Finalisation de l\'inscription au site snowtricks')
-                ->text('Pour finaliser votre inscription au site communautaire Snowtriks, veuillez cliquer sur lien suivant:')
+                ->text('Pour finaliser votre inscription au site communautaire Snowtricks, veuillez cliquer sur lien suivant:')
                 ->html('<a href="' . $url . '">Finaliser l\'inscription<\a>');
-
-            // $message = (new \Swift_Message('Nouveau contact'))
-            //     // On attribue l'expéditeur
-            //     ->setFrom('agnan.gregory@orange.fr')
-            //     // On attribue le destinataire
-            //     ->setTo('agnan.gregory@orange.fr')
-            //     // On crée le texte avec la vue
-            //     ->setBody(
-            //         'coucou',
-            //         'text/html'
-            //     );
 
             $mailer->send($email);
 
@@ -76,9 +67,16 @@ class SecurityController extends AbstractController
     /**
      * @Route("/connexion", name="security_login")
      */
-    public function login()
+    public function login(AuthenticationUtils $authenticationUtils)
     {
-        return $this->render('security/login.html.twig');
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error
+        ]);
     }
 
     /** 
@@ -153,7 +151,7 @@ class SecurityController extends AbstractController
                 ]);
 
                 $email = (new Email())
-                    ->from('no-reply@snowtricks.fr')
+                    ->from('agnan.gregory@orange.fr')
                     ->to($user->getEmail())
                     ->subject('Réinitialisation du mot de passe de votre compte au site Snowtricks')
                     ->text('Pour réinitialiser votre mot de passe, merci de cliquer sur le lien suivant.')

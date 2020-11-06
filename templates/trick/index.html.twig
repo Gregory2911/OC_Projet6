@@ -6,7 +6,12 @@
                 <div class="col-lg-2 col-md-5 col-xs-12 trickPresentation">                        
                     <div class="trickPicture">
                         <a href="{{ path('trick_show', {'id': trick.id}) }}">
-                            <img class="img-fluid" src= "{{ asset('uploads/images/trick/' ~ trick.trickPictures.first.filename) }}" id="photoPost">
+                            {% if trick.trickPictures.first.filename is defined %}
+                                <img class="img-fluid" src= "{{ asset('uploads/images/trick/' ~ trick.trickPictures.first.filename) }}" id="photoPost">
+                            {% else %}
+                                <img class="img-fluid" src= "{{ asset('images/headerPicture.jpg') }}" id="photoPost">
+                            {% endif %}
+                            
                         </a>
                     </div>
                     <div class="trickInfos">
@@ -14,13 +19,32 @@
                             {{ trick.name }}
                         </h3>
                         {% if trick.modifiedAt != null %}
-                            <p class="trickDate">Modifié le {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}} par {{Trick.user.username}}</p>
+                            <p class="trickDate">Modifié le {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:y')}} par {{trick.user.username}}</p>
                         {% else %}
                             <p class="trickDate">Ajouté le {{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:y')}} par {{trick.user.username}}</p>
                         {% endif %}
-                        <div class="text-center">
-                            <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
-                        </div>                                
+
+                        {% if not app.user %}                        
+                            <div class="text-center">
+                                <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <div class="col text-center">
+                                    <a href="{{ path('edit_trick', {'id': trick.id}) }}">
+                                        <i class="fas fa-pen" title="modifyTrick"></i>
+                                    </a>                                
+                                </div>                            
+                                <div class="col-6 text-center">
+                                    <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
+                                </div>
+                                <div class="col text-center">
+                                    <a href="{{ path('delete_trick', {'id': trick.id}) }}">
+                                        <i class="fas fa-trash-alt" title="deleteTrick"></i>                            
+                                    </a>                                
+                                </div>
+                            </div>                                
+                        {% endif %}
                     </div>                                                    
                 </div>
             {% endfor %}            

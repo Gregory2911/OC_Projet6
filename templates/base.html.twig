@@ -35,6 +35,9 @@
                     {% endif %}
                 </ul>            
             </div>
+            {% if app.user %}
+                <div class="faviconUser">{{ app.user.username }}</div>
+            {% endif %}
         </nav>
 
         {% for message in app.flashes('warning') %}

@@ -18,6 +18,14 @@ jQuery(document).ready(function () {
     $collectionHolderPicture = $('ul.pictureForm');
     $collectionHolderVideo = $('ul.videoForm');
 
+    $collectionHolderPicture.find("li").each(function () {
+        addTodoFormDeleteLink($(this));
+    });
+
+    $collectionHolderVideo.find("li").each(function () {
+        addTodoFormDeleteLink($(this));
+    });
+
     // add the "add a picture" button and li to the pictureForm ul
     $collectionHolderPicture.append($newPictureLinkLi);
     $collectionHolderVideo.append($newVideoLinkLi);
@@ -36,22 +44,6 @@ jQuery(document).ready(function () {
         // add a new pictureform (see next code block)
         addPictureForm($collectionHolderVideo, $newVideoLinkLi);
     });
-
-    // var $checkbox = document.getElementsByClassName('.essai');
-    // $checkbox.
-    // $('.essai').each(function () {
-    //     alert('coucou');
-    //     if ($(this).is(':checked')) {
-    //         alert('coucou');
-    //         $checkboxChecked = $(this);
-    //     }
-    //     $('.essai').each(function () {
-    //         if ($(this) != $checkboxChecked) {
-    //             alert('coucou');
-    //             $(this).prop('checked', false);
-    //         }
-    //     })
-    // });
 });
 
 function addPictureForm($collectionHolder, $newLinkLi) {

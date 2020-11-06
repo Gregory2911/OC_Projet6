@@ -133,6 +133,9 @@ class TrickController extends AbstractController
      */
     public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager)
     {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         if (!$trick) {
             $trick = new Trick();
         }
@@ -159,6 +162,7 @@ class TrickController extends AbstractController
             $submittedPictures = $trick->getTrickPictures();
             $filename = new FilenameCreator();
             $filesystem = new Filesystem();
+            $bMainPicture = 0;
             foreach ($submittedPictures as $submittedPicture) {
                 /** @var UploadedFile $file */
                 $file = $submittedPicture->getFile();
@@ -168,8 +172,15 @@ class TrickController extends AbstractController
                 } catch (FileException $e) {
                     throw $e;
                 }
-
+                if ($submittedPicture->getMainPicture() == 1) {
+                    $bMainPicture = 1;
+                }
                 $submittedPicture->setFilename($newFilename); // store only the filename in database
+                $manager->persist($submittedPicture);
+            }
+            //registration of a main picture if not defined
+            if ($bMainPicture == 0 && $submittedPictures[1] !== null) {
+                $submittedPictures[1]->setMainPicture(1);
                 $manager->persist($submittedPicture);
             }
 
@@ -187,7 +198,21 @@ class TrickController extends AbstractController
 
         return $this->render('trick/add_trick.html.twig', [
             'formTrick' => $form->createView(),
-            'editMode' => $trick->getId() !== null
+            'editMode' => $trick->getId() !== null,
+            'trick' => $trick,
+            'pictures' => $trick->getTrickPictures()
         ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Trick $trick
+     * @return void
+     * @Route("/suppression_trick/{id}", name="delete_trick")
+     */
+    public function deleteTrick(Trick $trick)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     }
 }

@@ -20,6 +20,10 @@ section
 	margin-right: 10px;
 }
 
+.faviconUser{
+	color: white;
+}
+
 /* Header Home*/
 #headerHome
 {
@@ -196,4 +200,18 @@ li
 {
 	list-style: none;
 	margin-bottom: 10px;
+}
+
+.img-preview-holder {
+	position: relative;
+    height: 0;
+    padding-bottom: 56.25%;
+	background-color: #000;
+}
+
+.img-preview {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
 }

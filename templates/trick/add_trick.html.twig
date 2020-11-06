@@ -2,10 +2,18 @@
 {% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
 
 {% macro pictureFormPrototype(picture) %}
-    <li>
+    <li>        
+        {% if picture.vars.value.filename is defined %}
+            <div class="form-group offset-2 col-8 offset-md-0 col-md-3">
+                <div class="img-preview-holder">                    
+                    <img class="img-preview" src="{{ picture.vars.value.filename starts with 'http' ? picture.vars.value.filename : asset('uploads/images/trick/' ~ picture.vars.value.filename) }}" alt="{{ picture.vars.value.filename }}">                    
+                </div>
+            </div>
+        {% endif %}
         <div class="input-group">
             <div class="custom-file">
-                {{ form_widget(picture.file) }}                
+                {{ form_widget(picture.file)
+                }}                
             </div>
             {# <div> #}
                 {{ form_widget(picture.mainPicture) }}                
@@ -19,6 +27,13 @@
 
 {% macro videoFormPrototype(video) %}
     <li>
+        {% if video.vars.value.link is defined %}
+            <div class="form-group offset-2 col-8 offset-md-0 col-md-3">            
+                <div class="video-container">
+                    <iframe src="{{ video.vars.value.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>		        
+	    	</div>
+        {% endif %}
         <div class="input-group">
             <div class="custom-file">
                 {{ form_widget(video.link) }}
@@ -38,7 +53,11 @@
 
         <img id="headerAddTrick" 
             {% if editMode %}
-                src="../../uploads/images/trick/{{ trick.trickPictures.first.filename }}">            
+                {% for picture in pictures %}
+                    {% if picture.mainPicture %}
+                        src="../../uploads/images/trick/{{ picture.filename }}"> 
+                    {% endif %}
+                {% endfor %}                
             {% else %}
                 src="https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20">            
             {% endif %}            
@@ -53,7 +72,7 @@
                 data-widget-tags="{{ '<li></li>'|e }}"
                 data-widget-counter="{{ formTrick.trickPictures|length }}">
                 {% for pictureField in formTrick.trickPictures %}
-                    {{ _self.pictureFormPrototype(pictureField) }}
+                    {{ _self.pictureFormPrototype(pictureField,editMode) }}
                 {% endfor %}  
                     {# prevents the display of this field at the end of the form when no child inside #}
                     {# {{ form_widget(formTrick.trickPictures) }}           #}
@@ -67,7 +86,7 @@
                 data-widget-tags="{{ '<li></li>'|e }}"
                 data-widget-counter="{{ formTrick.trickVideos|length }}">
                 {% for videoField in formTrick.trickVideos %}
-                    {{ _self.videoFormPrototype(videoField) }}
+                    {{ _self.videoFormPrototype(videoField,editMode) }}
                 {% endfor %}  
                     {# prevents the display of this field at the end of the form when no child inside #}
                     {# {{ form_widget(formTrick.trickVideos) }}           #}
