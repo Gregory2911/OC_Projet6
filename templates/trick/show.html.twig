@@ -45,21 +45,6 @@
                     {% endif %}
                 </article>
 
-                <ul class="list-unstyled" id="test">
-                    {% for comment in comments %}
-                        <li class="media commentMedia">                    
-                            <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                    
-                            <div class="media-body">
-                                <h4 class="mt-0 mb-1">{{ comment.user.username }}</h4>
-                                {{ comment.content }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <button id="loadMoreComments" class="btn btn-success">Plus de commentaires !</button>
-                <div id="trickID" style="display:none;">{{ trick.id }}</div>                
-                
                 {% if app.user %}
                     {{ form_start(commentForm) }}
                     {{ form_row(commentForm.content,{
@@ -68,6 +53,23 @@
                     <button type="submit" class="btn btn-success">Commenter</button>
                     {{ form_end(commentForm) }}
                 {% endif %}
+
+                <ul class="list-unstyled" id="test">
+                    {% for comment in comments %}
+                        <li class="media commentMedia">                    
+                            <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                                      
+                            <div class="media-body">
+                                <h4 class="mt-0 mb-1">{{ comment.user.username }}</h4>
+                                <div class="badge badge-success">le {{ comment.createdAt | date('d/m/Y') ~ ' à ' ~ comment.createdAt | date('H:i')}}</div>   
+                                <div>{{ comment.content }}</div>                                      
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <button id="loadMoreComments" class="btn btn-success">Plus de commentaires !</button>
+                <div id="trickID" style="display:none;">{{ trick.id }}</div>                
+                                
             </div>
         </div>
     </section>

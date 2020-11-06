@@ -133,14 +133,14 @@ class SecurityController extends AbstractController
             ]);
 
             if ($user === null) {
-                // var_dump($user);
-                // die();
                 $this->addFlash('warning', 'Pseudo inconnu !');
                 return $this->render('security/forgot_password.html.twig', [
                     'form' => $form->createView()
                 ]);
+            } elseif ($user->getIsConfirmed() == 0) {
+                $this->addFlash('warning', 'Votre compte est en attente de validation, vous ne pouvez pas modifier votre mot de passe.');
+                return $this->redirectToRoute('home');
             } else {
-
                 $user->setActivationToken(md5(uniqid()));
 
                 $manager->persist($user);

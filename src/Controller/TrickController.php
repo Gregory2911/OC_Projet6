@@ -89,7 +89,7 @@ class TrickController extends AbstractController
         $comments =  $repo->findBy(
             ['trick' => $trick],
             array('createdAt' => 'desc'),
-            5,
+            10,
             0
         );
 
@@ -118,7 +118,7 @@ class TrickController extends AbstractController
             $comments =  $repo->findBy(
                 ['trick' => $trick],
                 array('createdAt' => 'desc'),
-                5,
+                10,
                 $offset
             );
             return $this->render('trick/load_more_comments.html.twig', [
@@ -193,6 +193,7 @@ class TrickController extends AbstractController
             $manager->persist($trick);
             $manager->flush();
 
+            $this->addFlash('success', 'Votre trick a bien été ajouté !');
             return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
         }
 

@@ -4,7 +4,8 @@
             <img class="mr-3" src="{{ asset('uploads/images/avatar/' ~ comment.user.pictureFilename) }}">                    
             <div class="media-body">
                 <h4 class="mt-0 mb-1">{{ comment.user.username }}</h4>
-                {{ comment.content }}
+                <div class="badge badge-success">le {{ comment.createdAt | date('d/m/Y') ~ ' à ' ~ comment.createdAt | date('H:i')}}</div>   
+                <div>{{ comment.content }}</div>
             </div>
         </li>
     {% endfor %}

@@ -1,12 +1,3 @@
-//fixed the bug on filetype field when it is styled by Bootstrap
-// jQuery(document).ready(function () {
-//     $( window ).on( "load", function() {
-//         alert("coucou");
-//         $("#headerHome").hide();
-//     });
-// });
-
-// var limit = 5;
 var offset = 0;
 var trickId = $('#trickID').html();
 
@@ -25,8 +16,7 @@ function loadMoreComments(trickId, offset) {
 
 jQuery(document).ready(function () {
     $("#loadMoreComments").on("click", function (e) {
-        // limit += 5;
-        offset += 5;
+        offset += 10;
         loadMoreComments(trickId, offset);
     });
 });
