@@ -19,4 +19,9 @@ jQuery(document).ready(function () {
         offset += 10;
         loadMoreComments(trickId, offset);
     });
+
+    $("#action_see_medias").on("click", function (e) {
+        $("#see_medias").removeClass("d-md-none").addClass("d-none");
+        $("#trickMedias").removeClass("d-none d-md-block");
+    });
 });

@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="{{ asset("/css/style.css") }}" rel="stylesheet">
@@ -12,10 +13,10 @@
         {# navigation #}
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a id="logo" class="navbar-brand" href="{{ path('home') }}"><i id="logoPicture" class="fas fa-mountain"></i>SnowTricks</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarColor02">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ path('home') }}">Accueil<span class="sr-only">(current)</span></a>
@@ -40,6 +41,7 @@
             {% endif %}
         </nav>
 
+        {# message flash #}
         {% for message in app.flashes('warning') %}
             <div class="flash-warning">
                 {{ message }}
@@ -52,18 +54,35 @@
             </div>
         {% endfor %}
 
+         {# confirm delete trick modal #}        
+        <div id="delete_trick_modal" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Confirmez-vous la suppression du trick ?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <button id="delete_trick_button" class="btn btn-danger" type="button" data-dismiss="modal">Confirmer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% block body %}{% endblock %}              
         
-        <div class="card text-center footer">
+        <div class="card text-center footer mt-5">
             <div class="card-footer text-muted">
                 <footer>Snowtricks</footer>
             </div>
-        </div>                 
+        </div>   
         
         {% block javascripts %}
              <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
              <script src="https://kit.fontawesome.com/6476d46678.js" crossorigin="anonymous"></script>
-             <script type="text/javascript" src="{{ asset('js/index.js') }}"></script>             
+             <script type="text/javascript" src="{{ asset('js/index.js') }}"></script>   
+             <script type="text/javascript" src="{{ asset('js/base.js') }}"></script>             
         {% endblock %}
     </body>
 </html>

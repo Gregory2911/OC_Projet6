@@ -206,14 +206,46 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Undocumented function
-     *
-     * @param Trick $trick
-     * @return void
      * @Route("/suppression_trick/{id}", name="delete_trick")
      */
-    public function deleteTrick(Trick $trick)
+    public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        //remove Pictures
+        foreach ($trick->getTrickPictures() as $picture) {
+            $trick->removeTrickPicture($picture); //delete the picture from the entity
+            $manager->remove($picture); //delete the picture from the database
+            $this->deleteUploadedFile($picture->getFileName()); //delete the uploaded picture
+        }
+
+        //remove videos
+        foreach ($trick->getTrickVideos() as $video) {
+            $trick->removeTrickVideo($video);
+            $manager->remove($video);
+        }
+
+        //remove comments
+        foreach ($trick->getComments() as $comment) {
+            $trick->removeComment($comment);
+            $manager->remove($comment);
+        }
+
+        $manager->remove($trick);
+        $manager->flush();
+
+        $this->addFlash('success', 'Le trick a bien été supprimé');
+
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * Delete the uploaded file
+     */
+    public function deleteUploadedFile(string $filename)
+    {
+        $filesystem = new Filesystem();
+        $path = $this->getParameter('upload_images_directory') . '/trick' . $filename;
+        $filesystem->remove($path);
     }
 }

@@ -5,53 +5,63 @@
 {% block body %}
     <section class="container">
         {% if mainPicture is null %}
-            <div id="headerShow" style="background-image: url('../../images/headerPicture.jpg');">
+            <div class="mb-5" id="headerShow" style="background-image: url('../../images/headerPicture.jpg');">
         {% else %}
-            <div id="headerShow" style="background-image: url('../../uploads/images/trick/{{ mainPicture.filename }}');">
+            <div class="mb-5" id="headerShow" style="background-image: url('../../uploads/images/trick/{{ mainPicture.filename }}');">
         {% endif %}
             <h1 id="headerShowSlogan">{{ trick.name }}</h1>            
         </div>
 
-        <div class="row">
-            {% for picture in trick.trickPictures %}
-                <div class="col-lg-2">
-                    <div class="trickMedia">
-                        <img src="{{ asset('uploads/images/trick/' ~ picture.filename) }}" onclick="displayPictureViewModal( '{{ asset('uploads/img/' ~ picture.filename) }}', this )" alt="figure {{ trick.name }} - image {{ loop.index }}">
+        <div id="trickMedias" class="d-none d-md-block">
+            <div class="row mb-5">
+                {% for picture in trick.trickPictures %}
+                    <div class="col-lg-2 col-md-4">
+                        <div class="trickMedia">
+                            <img src="{{ asset('uploads/images/trick/' ~ picture.filename) }}" onclick="displayPictureViewModal( '{{ asset('uploads/img/' ~ picture.filename) }}', this )" alt="figure {{ trick.name }} - image {{ loop.index }}">
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
 
-            {% for video in trick.trickVideos %}
-                <div class="col-lg-2">
-                    <div class="trickMedia">
-                        <iframe src="{{video.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                {% for video in trick.trickVideos %}
+                    <div class="col-lg-2 col-md-4">
+                        <div class="trickMedia">
+                            <iframe src="{{video.link }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="see_medias" class="d-md-none text-center mb-5">
+            <a id="action_see_medias" class="btn btn-info">Voir les médias</a>
         </div>
 
         <div class="row justify-content-md-center">
             <div class="col-lg-6">
                 <article>        
                      <div>
-                        <h2 id="titleDescription">Description du trick</h2> 
-                        {{ trick.description }} 
+                        <h2 class="mb-3" id="titleDescription">Description du trick</h2> 
+                        <div class="mb-3">{{ trick.description }}</div>                                                
                     </div>
 
-                    <div class="badge badge-info">categorie : {{ trick.category.name }}</div>
-                    <div class="badge badge-success">créé le : {{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:i')}}</div>
-                    {% if trick.modifiedAt != null %}
-                        <div class="badge badge-warning">modifié le : {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i')}}</div>              
-                    {% endif %}
+                    <div class="mb-5">
+                        <div class="badge badge-info">categorie : {{ trick.category.name }}</div>
+                        <div class="badge badge-success">créé le : {{ trick.createdAt | date('d/m/Y') ~ ' à ' ~ trick.createdAt | date('H:i')}}</div>
+                        {% if trick.modifiedAt != null %}
+                            <div class="badge badge-warning">modifié le : {{ trick.modifiedAt | date('d/m/Y') ~ ' à ' ~ trick.modifiedAt | date('H:i')}}</div>              
+                        {% endif %}
+                    </div>                    
                 </article>
 
                 {% if app.user %}
-                    {{ form_start(commentForm) }}
-                    {{ form_row(commentForm.content,{
-                        'label': 'Commentaire'
-                    }) }}
-                    <button type="submit" class="btn btn-success">Commenter</button>
-                    {{ form_end(commentForm) }}
+                    <div class="mb-5">
+                        {{ form_start(commentForm) }}
+                        {{ form_row(commentForm.content,{
+                            'label': 'Commentaire'
+                        }) }}
+                        <button type="submit" class="btn btn-success">Commenter</button>
+                        {{ form_end(commentForm) }}
+                    </div>                    
                 {% endif %}
 
                 <ul class="list-unstyled" id="test">

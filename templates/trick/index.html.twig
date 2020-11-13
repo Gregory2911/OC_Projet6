@@ -31,15 +31,15 @@
                         {% else %}
                             <div class="row">
                                 <div class="col text-center">
-                                    <a href="{{ path('edit_trick', {'id': trick.id}) }}">
+                                    <a class="btn" href="{{ path('edit_trick', {'id': trick.id}) }}">
                                         <i class="fas fa-pen" title="modifyTrick"></i>
                                     </a>                                
                                 </div>                            
                                 <div class="col-6 text-center">
                                     <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
                                 </div>
-                                <div class="col text-center">
-                                    <a href="{{ path('delete_trick', {'id': trick.id}) }}">
+                                <div class="col text-center">                                    
+                                    <a class="btn" onclick="confirmDeleteTrick({{ trick.id }})">
                                         <i class="fas fa-trash-alt" title="deleteTrick"></i>                            
                                     </a>                                
                                 </div>
@@ -51,4 +51,6 @@
             </div>
         </div>         
     </div>
+    
 </section>
+
