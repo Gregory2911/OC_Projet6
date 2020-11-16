@@ -1,12 +1,30 @@
-section
-{
-    margin-top: 20px;
-}
-
+/* général */
 @font-face
 {
 	font-family:'Superion';
 	src:url('../Superion.otf') format('truetype');
+}
+
+html, body {
+	height: 100%;
+	margin: 0; padding: 0;
+}
+body {
+	position: relative;
+	display : table;
+	width: 100%;
+}
+footer {
+	position: absolute;
+	display : table-row;
+	bottom: 0;
+	width: 100%;
+	font-family: 'Superion'
+}
+
+section
+{
+    margin-top: 20px;
 }
 
 /* navbar */

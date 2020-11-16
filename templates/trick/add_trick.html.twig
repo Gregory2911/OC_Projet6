@@ -46,81 +46,81 @@
 {% endmacro %}
 
 {% block body %}
+    <section class="mb-5">
+        <h1>Création d'un trick</h1>
 
-    <h1>Création d'un trick</h1>
+        <div class="container">
 
-    <div class="container">
-
-        <img id="headerAddTrick" 
-            {% if editMode %}
-                {% for picture in pictures %}
-                    {% if picture.mainPicture %}
-                        src="../../uploads/images/trick/{{ picture.filename }}"> 
-                    {% endif %}
-                {% endfor %}                
-            {% else %}
-                src="https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20">            
-            {% endif %}            
-        </img>
-
-        {{ form_start(formTrick) }}
-
-        <div>
-            {{ form_label(formTrick.trickPictures, 'Images') }}
-            <ul id="email-fields-list" class="pictureForm"                
-                data-prototype="{{ _self.pictureFormPrototype(formTrick.trickPictures.vars.prototype)|e }}"
-                data-widget-tags="{{ '<li></li>'|e }}"
-                data-widget-counter="{{ formTrick.trickPictures|length }}">
-                {% for pictureField in formTrick.trickPictures %}
-                    {{ _self.pictureFormPrototype(pictureField,editMode) }}
-                {% endfor %}  
-                    {# prevents the display of this field at the end of the form when no child inside #}
-                    {# {{ form_widget(formTrick.trickPictures) }}           #}
-            </ul>
-        </div>
-
-        <div>
-            {{ form_label(formTrick.trickVideos, 'Videos') }}
-            <ul id="email-fields-list" class="videoForm"                
-                data-prototype="{{ _self.videoFormPrototype(formTrick.trickVideos.vars.prototype)|e }}"
-                data-widget-tags="{{ '<li></li>'|e }}"
-                data-widget-counter="{{ formTrick.trickVideos|length }}">
-                {% for videoField in formTrick.trickVideos %}
-                    {{ _self.videoFormPrototype(videoField,editMode) }}
-                {% endfor %}  
-                    {# prevents the display of this field at the end of the form when no child inside #}
-                    {# {{ form_widget(formTrick.trickVideos) }}           #}
-            </ul>
-        </div>
-
-        {{ form_row(formTrick.name, {
-            'attr': {'placeholder':"Nom du trick"},
-            'label': 'Nom du trick'
-        }) }}
-        
-        {{ form_row(formTrick.description, {
-            'attr': {'placeholder':"Description du trick"},
-            'label': 'Description du trick'
-        }) }}
-
-        {{ form_row(formTrick.category, {
-            'label': 'Catégorie'
-        }) }}
-
-        <div class="row justify-content-end col-auto">                        
-            <button type="submit" class="btn btn-success">
+            <img id="headerAddTrick" 
                 {% if editMode %}
-                    Modifier le trick
+                    {% for picture in pictures %}
+                        {% if picture.mainPicture %}
+                            src="../../uploads/images/trick/{{ picture.filename }}"> 
+                        {% endif %}
+                    {% endfor %}                
                 {% else %}
-                    Ajouter le trick
-                {% endif %}
-            </button>
+                    src="https://place-hold.it/800x500&text=Image_entete&bold&fontsize=20">            
+                {% endif %}            
+            </img>
+
+            {{ form_start(formTrick) }}
+
+            <div>
+                {{ form_label(formTrick.trickPictures, 'Images') }}
+                <ul id="email-fields-list" class="pictureForm"                
+                    data-prototype="{{ _self.pictureFormPrototype(formTrick.trickPictures.vars.prototype)|e }}"
+                    data-widget-tags="{{ '<li></li>'|e }}"
+                    data-widget-counter="{{ formTrick.trickPictures|length }}">
+                    {% for pictureField in formTrick.trickPictures %}
+                        {{ _self.pictureFormPrototype(pictureField,editMode) }}
+                    {% endfor %}  
+                        {# prevents the display of this field at the end of the form when no child inside #}
+                        {# {{ form_widget(formTrick.trickPictures) }}           #}
+                </ul>
+            </div>
+
+            <div>
+                {{ form_label(formTrick.trickVideos, 'Videos') }}
+                <ul id="email-fields-list" class="videoForm"                
+                    data-prototype="{{ _self.videoFormPrototype(formTrick.trickVideos.vars.prototype)|e }}"
+                    data-widget-tags="{{ '<li></li>'|e }}"
+                    data-widget-counter="{{ formTrick.trickVideos|length }}">
+                    {% for videoField in formTrick.trickVideos %}
+                        {{ _self.videoFormPrototype(videoField,editMode) }}
+                    {% endfor %}  
+                        {# prevents the display of this field at the end of the form when no child inside #}
+                        {# {{ form_widget(formTrick.trickVideos) }}           #}
+                </ul>
+            </div>
+
+            {{ form_row(formTrick.name, {
+                'attr': {'placeholder':"Nom du trick"},
+                'label': 'Nom du trick'
+            }) }}
+            
+            {{ form_row(formTrick.description, {
+                'attr': {'placeholder':"Description du trick"},
+                'label': 'Description du trick'
+            }) }}
+
+            {{ form_row(formTrick.category, {
+                'label': 'Catégorie'
+            }) }}
+
+            <div class="row justify-content-end col-auto">                        
+                <button type="submit" class="btn btn-success">
+                    {% if editMode %}
+                        Modifier le trick
+                    {% else %}
+                        Ajouter le trick
+                    {% endif %}
+                </button>
+            </div>
+
+            {{ form_end(formTrick) }}
+        
         </div>
-
-        {{ form_end(formTrick) }}
-    
-    </div>
-
+    </section>
 {% endblock %}
 
  {% block javascripts %}
