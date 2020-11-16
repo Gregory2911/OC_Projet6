@@ -7,13 +7,15 @@ use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Service\SlugGenerator;
 use App\Service\FilenameCreator;
+use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
@@ -54,10 +56,13 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{id}", name="trick_show")
+     * @Route("/trick/{slug}", name="trick_show")
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
+    public function show(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager)
     {
+
+        $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
+
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -72,7 +77,7 @@ class TrickController extends AbstractController
             $manager->persist($comment);
             $manager->flush();
 
-            return $this->redirectToroute('trick_show', ['id' => $trick->getId()]);
+            return $this->redirectToroute('trick_show', ['slug' => $trick->getSlug()]);
         }
 
         //recovery of the main photo if it exists
@@ -131,7 +136,7 @@ class TrickController extends AbstractController
      * @Route("/add_trick", name="add_trick")
      * @Route("/edit_trick/{id}", name="edit_trick")
      */
-    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager)
+    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -149,6 +154,8 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $trick->setUser($user);
+
+            $trick->setSlug($slugGenerator->convert($trick->getName()));
 
             //Si modification
             if ($trick->getId()) {
@@ -194,7 +201,7 @@ class TrickController extends AbstractController
             $manager->flush();
 
             $this->addFlash('success', 'Votre trick a bien été ajouté !');
-            return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
+            return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
 
         return $this->render('trick/add_trick.html.twig', [

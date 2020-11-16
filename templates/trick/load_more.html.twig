@@ -2,7 +2,7 @@
     {% for trick in tricks %}                                                
         <div class="col-lg-2 col-md-5 col-xs-12 trickPresentation">            
             <div class="trickPicture">
-                <a href="{{ path('trick_show', {'id': trick.id}) }}">
+                <a href="{{ path('trick_show', {'slug': trick.slug}) }}">
                     <img class="img-fluid" src= "{{ asset('uploads/images/trick/' ~ trick.trickPictures.first.filename) }}" id="photoPost">
                 </a>
             </div>
@@ -18,7 +18,7 @@
                 
                 {% if not app.user %}                        
                     <div class="text-center">
-                        <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
+                        <a class="trickLink" href="{{ path('trick_show', {'slug': trick.slug}) }}">GO !</a>
                     </div>
                 {% else %}
                     <div class="row">
@@ -28,7 +28,7 @@
                             </a>                                
                         </div>                            
                         <div class="col-6 text-center">
-                            <a class="trickLink" href="{{ path('trick_show', {'id': trick.id}) }}">GO !</a>
+                            <a class="trickLink" href="{{ path('trick_show', {'slug': trick.slug}) }}">GO !</a>
                         </div>
                         <div class="col text-center">
                             <a class="btn" onclick="confirmDeleteTrick({{ trick.id }})">

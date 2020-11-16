@@ -5,25 +5,29 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Category;
-use App\Entity\TrickPicture;
 use App\Entity\TrickVideo;
+use App\Entity\TrickPicture;
+use App\Service\SlugGenerator;
 use App\Service\FilenameCreator;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Filesystem\Filesystem;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 class TrickFixtures extends Fixture implements OrderedFixtureInterface
 {
     private $encoder;
     private $container;
+    private $slugGenerator;
 
-    public function __construct(UserPasswordEncoderInterface $encoder, ContainerInterface $container)
+    public function __construct(UserPasswordEncoderInterface $encoder, ContainerInterface $container, SlugGenerator $slugGenerator)
     {
         $this->encoder = $encoder;
         $this->container = $container;
+        $this->slugGenerator = $slugGenerator;
     }
 
     public function load(ObjectManager $manager)
@@ -144,7 +148,8 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface
                         ->setDescription($trickData[2])
                         ->setCreatedAt($dateCreation)
                         ->setUser($user)
-                        ->setCategory($category);
+                        ->setCategory($category)
+                        ->setSlug($this->slugGenerator->convert($trickData[0]));
                     $manager->persist($trick);
 
                     //Create all pictures
