@@ -13,31 +13,33 @@ Création d'un site communautaire pour passionner de snowboard.
 <pre><code>git clone https://github.com/Gregory2911/OC_Projet6.git</code></pre>
 
 <p><strong>Etape 2</strong> Installer les dépendances:</p>
+<p>Exécuter la commande suivante dans le dossier à la racine du projet</p>
 <pre><code>composer install</code></pre>
 
-<p><strong>Etape 3 :</strong> Créer une base de données</p>
-<p>Modifier la connexion à la base de données dans le fichier .env comme l'exemple suivant :</p>
+<p><strong>Etape 3 :</strong> Modification des informations de connexion à la base de données</p>
+<p>Modifier la connexion à la base de données dans le fichier .env comme l'exemple suivant en choisissant un nom pour cette base :</p>
 <pre><code>DATABASE_URL=mysql://root:@127.0.0.1:3308/snowtricks?serverVersion=5.7</code></pre>
 
-<p><strong>Etape 4 :</strong>Création de la base de données.</p>
+<p><strong>Etape 4 :</strong> Création de la base de données.</p>
+<p>Exécuter la commande suivante dans le dossier à la racine du projet</p>
 <pre><code>php bin/console doctrine:database:create</code></pre>
 
-<p><strong>Etape 5 :</strong>Création de la structure de la base de données</p> 
-<p>exécuter la commande suivante dans le dossier à la racine du projet</p>
+<p><strong>Etape 5 :</strong> Création de la structure de la base de données</p> 
+<p>Exécuter la commande suivante dans le dossier à la racine du projet</p>
 <pre><code>php bin/console doctrine:migrations:migrate</code></pre>
 
-<p><strong>Etape 6 :</strong>Création d'un jeu de données</p> 
+<p><strong>Etape 6 :</strong> Création d'un jeu de données</p> 
 <p>Vous pouvez remplir la base avec un jeu de données de figures et d'utilisateurs en exécutant la commande suivante :</p>
 <pre><code>php bin/console doctrine:fixtures:load</code></pre>
 
-<p><strong>Etape 7 :</strong>Configuration du serveur SMTP</p> 
+<p><strong>Etape 7 :</strong> Configuration du serveur SMTP</p> 
 <p>Rendez-vous dans le fichier .env pour modifier la ligne suivante avec vos informations de connexion</p>
 <pre><code>#MAILER_DSN=smtp://localhost</code></pre>
 
-<p><strong>Etape 8 :</strong>Connexion à l'espace membre</p> 
+<p><strong>Etape 8 :</strong> Connexion à l'espace membre</p> 
 <p>Si vous avez initialisé le jeu de données fourni, vous pouvez vous connecter avec les identifiants suivants :</p>
-<p>login : admin@snowtricks.fr
-<p>mot de passe : admin</p>
+<p><strong>login</strong> : admin@snowtricks.fr
+<p><strong>mot de passe</strong> : admin</p>
 <p>Sinon inscrivez-vous via le formulaire du site.</p>
 
-<p>Votre site est désormais fonctionnel.</p>
+<p><strong>Votre site est désormais fonctionnel.<strong></p>
