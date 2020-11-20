@@ -45,15 +45,13 @@ section
 
 /* Header Home*/
 #headerHome
-{
-	/* position: fixed; */
+{	
 	height: 100vh;
 	width: 100%;
 	background-image: url('../../images/headerPicture.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-position: center;
-	/* -webkit-background-size: contain;  */
+	background-position: center;	
 }
 
 #headerSlogan
@@ -95,15 +93,12 @@ section
 
 /* Index */
 #listTricks
-{
-	width: 100%;
+{	
 	margin-bottom: 30px;
 }
 
 .trickPresentation
 {
-	/* border: 1px solid darkgray; */
-	padding: 0%;
 	margin-right: 10px;
 	margin-bottom: 30px;
 }
@@ -116,8 +111,7 @@ section
 .trickPicture 
 {
 	position: relative;
-	height: 15em;
-	/* margin-bottom: 10px; */
+	height: 15em;	
 	background-color: darkgray;
 }
 
@@ -149,7 +143,6 @@ section
 {
 	color: rgb(30, 163, 198);
 	background-color: rgb(249, 185, 24);	
-	/* font-weight: bold; */
 	font-family: 'Superion';
 	display: none;
 }

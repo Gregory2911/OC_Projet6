@@ -27,18 +27,22 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="4",minMessage="Votre pseudo doit faire au minimum 4 caractères")
+     * @Assert\NotBlank()
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email()
+     * @Assert\NotBlank()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min="8",minMessage="Votre mot de passe doit faire au minimum 8 caractères")
+     * @Assert\NotBlank()
      */
     private $password;
 
