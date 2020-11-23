@@ -65,6 +65,16 @@ section
 	
 }
 
+#headerSloganResponsive
+{
+	font-family: 'Superion';
+	/* font-size: 80px !important; */
+	color: white;
+	position: absolute;
+	left: 10vw;
+	top: 50vh;
+}
+
 #arrow {
 	position: absolute;
 	left: 50vw;
