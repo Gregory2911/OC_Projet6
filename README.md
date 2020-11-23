@@ -1,5 +1,7 @@
 # OC_Projet6
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e371acf4d8f24978997659d517237747)](https://app.codacy.com/gh/Gregory2911/OC_Projet6?utm_source=github.com&utm_medium=referral&utm_content=Gregory2911/OC_Projet6&utm_campaign=Badge_Grade_Settings)
+
 Création d'un site communautaire pour passionner de snowboard.
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e69f714dd62e464f8c52baab6212a2c2)](https://www.codacy.com/gh/Gregory2911/OC_Projet6/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Gregory2911/OC_Projet6&amp;utm_campaign=Badge_Grade)
