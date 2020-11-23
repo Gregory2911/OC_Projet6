@@ -1,6 +1,6 @@
 # OC_Projet6
 
-Création d'un site communautaire pour passionner de snowboard.
+Création d'un site communautaire pour passionnés de snowboard.
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e69f714dd62e464f8c52baab6212a2c2)](https://www.codacy.com/gh/Gregory2911/OC_Projet6/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Gregory2911/OC_Projet6&amp;utm_campaign=Badge_Grade)
 
