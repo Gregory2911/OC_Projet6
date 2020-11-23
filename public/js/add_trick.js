@@ -44,6 +44,8 @@ jQuery(document).ready(function () {
         // add a new pictureform (see next code block)
         addPictureForm($collectionHolderVideo, $newVideoLinkLi);
     });
+
+    undisablePreExistantTrickPictureBeforeSubmit();
 });
 
 function addPictureForm($collectionHolder, $newLinkLi) {
@@ -93,6 +95,14 @@ function addTodoFormDeleteLink($formPicture) {
         // remove the li for the picture form
         $formPicture.remove();
     });
+}
+
+function undisablePreExistantTrickPictureBeforeSubmit() {
+    $('form').submit(function (e) {
+        $(':disabled').each(function (e) {
+            $(this).removeAttr('disabled');
+        })
+    })
 }
 
 //control of the checkbox of main picture

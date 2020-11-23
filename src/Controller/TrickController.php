@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class TrickController extends AbstractController
 {
@@ -135,16 +136,13 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/add_trick", name="add_trick")
-     * @Route("/edit_trick/{id}", name="edit_trick")
      */
     public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$trick) {
-            $trick = new Trick();
-        }
+        $trick = new Trick();
 
         $user = $this->getUser();
 
@@ -158,13 +156,7 @@ class TrickController extends AbstractController
 
             $trick->setSlug($slugGenerator->convert($trick->getName()));
 
-            //Si modification
-            if ($trick->getId()) {
-                $trick->setModifiedAt(new \DateTime());
-            } else {
-                $trick->setCreatedAt(new \DateTime());
-                // $trick->setUser($user);
-            }
+            $trick->setCreatedAt(new \DateTime());
 
             //submitted pictures handling
             $submittedPictures = $trick->getTrickPictures();
@@ -172,20 +164,24 @@ class TrickController extends AbstractController
             $filesystem = new Filesystem();
             $bMainPicture = 0;
             foreach ($submittedPictures as $submittedPicture) {
-                /** @var UploadedFile $file */
-                $file = $submittedPicture->getFile();
-                $newFilename = $filename->createUniqueFilename($file->getClientOriginalName());
-                try {
-                    $file->move($this->getParameter('upload_images_directory') . '/trick', $newFilename);
-                } catch (FileException $e) {
-                    throw $e;
+                if ($submittedPicture->getId() == null) {
+                    /** @var UploadedFile $file */
+                    $file = $submittedPicture->getFile();
+                    $newFilename = $filename->createUniqueFilename($file->getClientOriginalName());
+                    try {
+                        $file->move($this->getParameter('upload_images_directory') . '/trick', $newFilename);
+                    } catch (FileException $e) {
+                        throw $e;
+                    }
+                    if ($submittedPicture->getMainPicture() == 1) {
+                        $bMainPicture = 1;
+                    }
+                    $submittedPicture->setFilename($newFilename); // store only the filename in database
+
+                    $manager->persist($submittedPicture);
                 }
-                if ($submittedPicture->getMainPicture() == 1) {
-                    $bMainPicture = 1;
-                }
-                $submittedPicture->setFilename($newFilename); // store only the filename in database
-                $manager->persist($submittedPicture);
             }
+
             //registration of a main picture if not defined
             if ($bMainPicture == 0 && $submittedPictures[1] !== null) {
                 $submittedPictures[1]->setMainPicture(1);
@@ -207,7 +203,114 @@ class TrickController extends AbstractController
 
         return $this->render('trick/add_trick.html.twig', [
             'formTrick' => $form->createView(),
-            'editMode' => $trick->getId() !== null,
+            'editMode' => false,
+            'trick' => $trick,
+            'pictures' => $trick->getTrickPictures()
+        ]);
+    }
+
+    /**
+     * @Route("/edit_trick/{id}", name="edit_trick")
+     */
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
+    {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // $user = $this->getUser();
+
+        // Store initial pictures of the trick to compare
+        $originalPictures = new ArrayCollection();
+        foreach ($trick->getTrickPictures() as $picture) {
+            $originalPictures->add($picture);
+        }
+
+        // Store initial videos of the trick to compare
+        $originalVideos = new ArrayCollection();
+        foreach ($trick->getTrickVideos() as $video) {
+            $originalVideos->add($video);
+        }
+
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $trick->setModifiedAt(new \DateTime())
+                ->setSlug($slugGenerator->convert($trick->getName()));
+
+            //submitted pictures handling
+            $submittedPictures = $trick->getTrickPictures();
+            $filename = new FilenameCreator();
+            $filesystem = new Filesystem();
+            $bMainPicture = 0;
+            foreach ($submittedPictures as $submittedPicture) {
+                if ($submittedPicture->getId() == null) {
+                    /** @var UploadedFile $file */
+                    $file = $submittedPicture->getFile();
+                    $newFilename = $filename->createUniqueFilename($file->getClientOriginalName());
+                    try {
+                        $file->move($this->getParameter('upload_images_directory') . '/trick', $newFilename);
+                    } catch (FileException $e) {
+                        throw $e;
+                    }
+                    if ($submittedPicture->getMainPicture() == 1) {
+                        $bMainPicture = 1;
+                    }
+                    $submittedPicture->setFilename($newFilename); // store only the filename in database
+
+                    $manager->persist($submittedPicture);
+                }
+            }
+
+            // check for removed Pictures
+            foreach ($originalPictures as $picture) {
+                // if the picture is missing in submission
+                if (false === $trick->getTrickPictures()->contains($picture)) {
+                    $picture->setTrick(null); // remove the relationship
+                    $manager->persist($picture);
+                    $manager->remove($picture); // delete the picture from database
+                    $this->deleteUploadedFile($picture->getFilename()); // delete thepicture from files
+                } elseif ($picture->getMainPicture()) {
+                    $bMainPicture = 1;
+                }
+            }
+
+            //registration of a main picture if not defined
+            if ($bMainPicture == 0 && $submittedPictures[1] !== null) {
+                $submittedPictures[1]->setMainPicture(1);
+                $manager->persist($submittedPicture);
+            }
+
+            //submitted videos handling
+            $submittedVideos = $trick->getTrickVideos();
+            foreach ($submittedVideos as $submittedVideo) {
+                $manager->persist($submittedVideo);
+            }
+
+            // check for removed Videos
+            foreach ($originalVideos as $video) {
+                if (false === $trick->getTrickVideos()->contains($video)) {
+                    $video->setTrick(null); // remove the relationship 
+                    $manager->persist($video);
+                    $manager->remove($video); // delete the video
+                }
+            }
+
+            $manager->persist($trick);
+            // dump($trick);
+            // die();
+            $manager->flush();
+
+            $this->addFlash('success', 'Votre trick a bien été modifié !');
+            return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
+        }
+
+        return $this->render('trick/add_trick.html.twig', [
+            'formTrick' => $form->createView(),
+            'editMode' => true,
             'trick' => $trick,
             'pictures' => $trick->getTrickPictures()
         ]);
@@ -253,7 +356,7 @@ class TrickController extends AbstractController
     public function deleteUploadedFile(string $filename)
     {
         $filesystem = new Filesystem();
-        $path = $this->getParameter('upload_images_directory') . '/trick' . $filename;
+        $path = $this->getParameter('upload_images_directory') . '/trick/' . $filename;
         $filesystem->remove($path);
     }
 }

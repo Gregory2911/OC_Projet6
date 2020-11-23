@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
 
-{% macro pictureFormPrototype(picture) %}
+{% macro pictureFormPrototype(picture, placeholder, isRequired, isDisabled) %}
     <li>        
         {% if picture.vars.value.filename is defined %}
             <div class="form-group offset-2 col-8 offset-md-0 col-md-3">
@@ -12,7 +12,13 @@
         {% endif %}
         <div class="input-group">
             <div class="custom-file">
-                {{ form_widget(picture.file)
+                {{ form_widget(picture.file, {
+                    'attr':{
+                        'placeholder':placeholder,
+                        'required':isRequired,
+                        'disabled':isDisabled
+                    }
+                })
                 }}                
             </div>
             {# <div> #}
@@ -68,14 +74,12 @@
             <div>
                 {{ form_label(formTrick.trickPictures, 'Images') }}
                 <ul id="email-fields-list" class="pictureForm"                
-                    data-prototype="{{ _self.pictureFormPrototype(formTrick.trickPictures.vars.prototype)|e }}"
+                    data-prototype="{{ _self.pictureFormPrototype(formTrick.trickPictures.vars.prototype,'Sélectionnez un fichier',true,false)|e }}"
                     data-widget-tags="{{ '<li></li>'|e }}"
                     data-widget-counter="{{ formTrick.trickPictures|length }}">
                     {% for pictureField in formTrick.trickPictures %}
-                        {{ _self.pictureFormPrototype(pictureField,editMode) }}
-                    {% endfor %}  
-                        {# prevents the display of this field at the end of the form when no child inside #}
-                        {# {{ form_widget(formTrick.trickPictures) }}           #}
+                        {{ _self.pictureFormPrototype(pictureField,pictureField.vars.value.filename,false,true) }}
+                    {% endfor %}                          
                 </ul>
             </div>
 
@@ -87,9 +91,7 @@
                     data-widget-counter="{{ formTrick.trickVideos|length }}">
                     {% for videoField in formTrick.trickVideos %}
                         {{ _self.videoFormPrototype(videoField,editMode) }}
-                    {% endfor %}  
-                        {# prevents the display of this field at the end of the form when no child inside #}
-                        {# {{ form_widget(formTrick.trickVideos) }}           #}
+                    {% endfor %}                          
                 </ul>
             </div>
 

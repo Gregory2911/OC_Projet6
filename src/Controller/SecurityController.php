@@ -51,8 +51,7 @@ class SecurityController extends AbstractController
                 ->from('agnan.gregory@orange.fr')
                 ->to($user->getEmail())
                 ->subject('Finalisation de l\'inscription au site snowtricks')
-                ->text('Pour finaliser votre inscription au site communautaire Snowtricks, veuillez cliquer sur lien suivant:')
-                ->html('<a href="' . $url . '">Finaliser l\'inscription<\a>');
+                ->html('<p>Pour finaliser votre inscription au site communautaire Snowtricks, veuillez cliquer sur lien suivant : <a href="' . $url . '">Finaliser l\'inscription</a></p>');
 
             $mailer->send($email);
 
@@ -71,11 +70,7 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
 
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -160,8 +155,7 @@ class SecurityController extends AbstractController
                     ->from('agnan.gregory@orange.fr')
                     ->to($user->getEmail())
                     ->subject('Réinitialisation du mot de passe de votre compte au site Snowtricks')
-                    ->text('Pour réinitialiser votre mot de passe, merci de cliquer sur le lien suivant.')
-                    ->html('<a href="' . $url . '">Réinitialiser<\a>');
+                    ->html('<p>Pour réinitialiser votre mot de passe, merci de cliquer sur le lien suivant : <a href="' . $url . '">Réinitialiser</a></p>');
 
                 $mailer->send($email);
 
@@ -193,7 +187,6 @@ class SecurityController extends AbstractController
         } else {
 
             $form = $this->createFormBuilder()
-                // ->add('email', EmailType::class)
                 ->add('password', PasswordType::class)
                 ->getForm();
 
@@ -202,12 +195,6 @@ class SecurityController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 
                 $formData = $form->getData();
-
-                // $emailSending = $user->getEmail();
-
-                // if ($emailSending !== $formData['email']) {
-                //     $this->addFlash('warning', 'Email utilisateur inconnu');
-                // } else {
 
                 $hash = $encoder->encodePassword($user, $formData['password']);
                 $user->setPassword($hash);
@@ -222,7 +209,6 @@ class SecurityController extends AbstractController
                 $this->addFlash('success', 'Votre mot de passe a bien été modifié');
 
                 return $this->redirectToRoute('home');
-                // }
             }
 
             return $this->render('security/reset_password.html.twig', [
